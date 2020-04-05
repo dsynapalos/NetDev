@@ -13,11 +13,14 @@ before_script:
 Connect to Cisco Sandbox:
   stage: vpn_connect
   script:
-    - touch oc.pid
-    - echo $VPN_PASS | openconnect -b -v --pid-file=oc.pid --user=$VPN_USER --passwd-on-stdin devnetsandbox-us-sjc.cisco.com:$VPN_PORT
-    - cat oc.pid
+    - touch $OC_PID
+    - echo $VPN_PASS | openconnect -b -v --pid-file=$OC_PID --user=$VPN_USER --passwd-on-stdin devnetsandbox-us-sjc.cisco.com:$VPN_PORT
+    - ps -A | grep openconnect
+    - cat $OC_PID
+    - pkill -e -F $OC_PID
     - ping $CSR1000V_HOST -c 4
     - ansible-playbook test_playbook
+    - pkill -e -F $OC_PID
 
 after_script:
-  - pkill -e -F oc.pid
+  - ps -A | grep openconnect
