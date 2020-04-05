@@ -1,7 +1,7 @@
 image: ubuntu:18.04
 
 stages:
-  - connect
+  - vpn_connect
 
 before_script:
   - apt-get update -y
@@ -11,6 +11,6 @@ before_script:
 
 
 connect:
-  stage: connect
+  stage: vpn_connect
   script:
-    - echo $VPN_PASS | openconnect -b --user=$VPN_USER --passwd-on-stdin --no-cert-check devnetsandbox-us-sjc.cisco.com:$VPN_PORT
+    - echo $VPN_PASS | openconnect -b --user=$VPN_USER --passwd-on-stdin devnetsandbox-us-sjc.cisco.com:$VPN_PORT
