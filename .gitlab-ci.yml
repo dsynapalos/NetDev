@@ -22,4 +22,4 @@ Use Ansible to get Runn Config:
     - ansible-playbook test_playbook
 
 after_script:
-  - kill 'ps aux|grep openconnect|grep -v grep|cut -c 10-15'
+  - ps aux|grep openconnect|grep -v grep|cut -c 10-15|kill
