@@ -10,7 +10,6 @@ before_script:
   - tar xvf anyconnect-linux64-4.7.04056-predeploy-k9.tar.gz
   - cd anyconnect-linux64-4.7.04056/vpn/
   - ./vpn_install.sh
-  - alias vpn='/opt/cisco/anyconnect/bin/vpn'
   - pip3 install ansible
   - ansible --version
 
@@ -19,4 +18,4 @@ before_script:
 connect:
   stage: connect
   script:
-    - vpn
+    - /opt/cisco/anyconnect/bin/vpn
