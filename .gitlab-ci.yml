@@ -13,5 +13,5 @@ before_script:
 Connect to Cisco Sandbox:
   stage: vpn_connect
   script:
-    - echo $VPN_PASS | openconnect -b --user=$VPN_USER --passwd-on-stdin devnetsandbox-us-sjc.cisco.com:$VPN_PORT
+    - echo $VPN_PASS | openconnect -b -v --user=$VPN_USER --passwd-on-stdin devnetsandbox-us-sjc.cisco.com:$VPN_PORT
     - ping $CSR1000V_HOST -c 4
