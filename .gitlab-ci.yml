@@ -10,7 +10,7 @@ before_script:
   - pip3 install ansible
 
 
-connect:
+Connect to Cisco Sandbox:
   stage: vpn_connect
   script:
     - echo $VPN_PASS | openconnect -b --user=$VPN_USER --passwd-on-stdin devnetsandbox-us-sjc.cisco.com:$VPN_PORT
