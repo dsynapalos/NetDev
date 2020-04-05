@@ -1,0 +1,14 @@
+---
+- hosts: {{ CSR1000V_HOST }}
+  become: yes
+  become_method: enable
+  become_pass: {{ CSR1000V_PASS }}
+  ansible_user: {{ CSR1000V_USER }}
+  ansible_password: {{ CSR1000V_PASS }}
+  connection: network_cli
+  
+  tasks:
+    - name: run multiple commands on remote nodes
+        ios_command:
+          commands:
+            - show runn
