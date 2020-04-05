@@ -3,6 +3,15 @@ image: ubuntu:18.04
 stages:
   - build
 
+before_script:
+  - apt-get update -y
+  - apt-get upgrade -y
+  - apt-get install -y anyconnect python3 python3-pip
+  - pip install ansible
+  - ansible --version
+
+
+
 build:
   stage: build
   script:
