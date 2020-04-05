@@ -10,7 +10,7 @@ before_script:
   - tar xvf anyconnect-linux64-4.7.04056-predeploy-k9.tar.gz
   - cd anyconnect-linux64-4.7.04056/vpn/
   - ./vpn_install.sh
-  - pip install ansible
+  - pip3 install ansible
   - ansible --version
 
 
