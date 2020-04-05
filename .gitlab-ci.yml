@@ -2,6 +2,7 @@ image: ubuntu:18.04
 
 stages:
   - vpn_connect
+  - ansible
 
 before_script:
   - apt-get update -y
@@ -15,3 +16,11 @@ Connect to Cisco Sandbox:
   script:
     - echo $VPN_PASS | openconnect -b -v --user=$VPN_USER --passwd-on-stdin devnetsandbox-us-sjc.cisco.com:$VPN_PORT
     - ping $CSR1000V_HOST -c 4
+
+Use Ansible to get Runn Config:
+  stage: ansible
+  script:
+    - ansible-playbook test_playbook
+
+after_script:
+  - kill 'ps aux|grep openconnect|grep -v grep|cut -c 10-15'
