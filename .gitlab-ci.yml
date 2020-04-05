@@ -16,4 +16,6 @@ Connect to Cisco Sandbox:
     - echo $VPN_PASS | openconnect -b -v --pid-file=$OC_PID --user=$VPN_USER --passwd-on-stdin devnetsandbox-us-sjc.cisco.com:$VPN_PORT
     - ping $CSR1000V_HOST -c 4
     - ansible-playbook test_playbook
-    - pkill -2 -e -F $OC_PID
+  
+after_script:
+  - pkill -2 -e -F $OC_PID
