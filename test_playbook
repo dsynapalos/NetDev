@@ -9,6 +9,6 @@
   
   tasks:
     - name: run multiple commands on remote nodes
-        ios_command:
-          commands:
-            - show runn
+      ios_command:
+        commands:
+          - show runn
