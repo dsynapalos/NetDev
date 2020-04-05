@@ -8,7 +8,7 @@ before_script:
   - apt-get upgrade -y
   - apt-get install -y lib32z1 lib32ncurses5 python3 python3-pip
   - tar xvf anyconnect-linux64-4.7.04056-predeploy-k9.tar.gz
-  - vpn/vpn_install.sh
+  - anyconnect-linux64-4.7.04056/vpn/vpn_install.sh
   - pip install ansible
   - ansible --version
 
