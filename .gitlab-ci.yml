@@ -1,13 +1,15 @@
 image: ubuntu:18.04
 
 stages:
+  - gather_dependents
   - vpn_connect
   - get_config
   
 variables:
   ANSIBLE_HOST_KEY_CHECKING: "False"
   
-before_script:
+Build container and install Dependencies:
+  stage: gather_dependents
   - apt-get update -y
   - apt-get upgrade -y
   - apt-get install -y python3 python3-pip openconnect iputils-ping procps
@@ -27,6 +29,8 @@ Connect to Cisco Sandbox with Cookie:
     paths:
       - Cookie
   allow_failure: yes
+  dependencies:
+    - Build container and install Dependencies:
 
 Connect to Cisco Sandbox with Password:
   stage: vpn_connect
@@ -40,6 +44,8 @@ Connect to Cisco Sandbox with Password:
     paths:
       - Cookie
   allow_failure: yes
+  dependencies:
+    - Build container and install Dependencies:
       
 Connect to Cisco Sandbox and backup config:
   stage: get_config
@@ -54,6 +60,8 @@ Connect to Cisco Sandbox and backup config:
     paths:
       - /tempfile
   when: on_success
+  dependencies:
+    - Build container and install Dependencies:
   
 after_script:
  #- cat $OC_PID
