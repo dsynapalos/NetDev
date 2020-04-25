@@ -19,13 +19,19 @@
       register: config
         
     - debug: var=config.stdout_lines
+    
+    - name: configurable backup path
+      ios_config:
+        backup: yes
+        backup_options:
+          filename: tempfile
       
     #- copy: content="{{ config.stdout_lines }}" dest=tempfile
-    - name: Validate the sudoers file before saving
-      lineinfile:
-        path: tempfile
-        state: present
-        line: "{{ item }}"
-        create: yes
-      with_items:
-        "{{config.stdout_lines[0]}}"
+    #- name: Validate the sudoers file before saving
+    #  lineinfile:
+    #    path: tempfile
+    #    state: present
+    #    line: "{{ item }}"
+    #    create: yes
+    #  with_items:
+    #    "{{config.stdout_lines[0]}}"
