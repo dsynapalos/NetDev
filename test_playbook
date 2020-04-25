@@ -28,4 +28,4 @@
         line: "{{ item }}"
         create: yes
       with_items:
-        config.stdout_lines[0]
+        "{{config.stdout_lines[0]}}"
