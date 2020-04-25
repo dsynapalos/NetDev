@@ -18,5 +18,5 @@
           - show runn
       register: config
         
-    - debug: var=config
+    - debug: var=config.stdout_lines
       
