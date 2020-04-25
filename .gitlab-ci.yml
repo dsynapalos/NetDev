@@ -19,7 +19,7 @@ Connect to Cisco Sandbox:
     - touch $OC_PID
     - touch Cookie
     - echo $VPN_PASS | openconnect -b -v --pid-file=$OC_PID --user=$VPN_USER -q --cookie=4F37C8@446464@6A2E@33073D9937F010AF935B2672F68A68E43DD6B683 --passwd-on-stdin devnetsandbox-us-sjc.cisco.com:$VPN_PORT --printcookie > Cookie
-    - echo Cookie
+    - cat Cookie
     - ping $CSR1000V_HOST -c 4
     - touch inventory
     - echo "CSR1000V ansible_host=${CSR1000V_HOST}" > inventory
@@ -31,5 +31,5 @@ Connect to Cisco Sandbox:
       - inventory
       
 after_script:
- - cat $OC_PID
- - pkill -2 -e -F $OC_PID
+ #- cat $OC_PID
+ #- pkill -2 -e -F $OC_PID
