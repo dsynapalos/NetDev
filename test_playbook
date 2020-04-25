@@ -26,5 +26,6 @@
         path: tempfile
         state: present
         line: "{{ item }}"
+        create=yes
       with_items:
         config.stdout_lines[0]
