@@ -32,5 +32,5 @@ Connect to Cisco Sandbox:
       - inventory
       
 after_script:
-cat $OC_PID
-- pkill -2 -e -F $OC_PID
+ - cat $OC_PID
+ - pkill -2 -e -F $OC_PID
