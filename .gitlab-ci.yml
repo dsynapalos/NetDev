@@ -1,7 +1,9 @@
 image: ubuntu:18.04
 
 stages:
-  - vpn_connect
+  - vpn_connect1
+  - vpn_connect2
+  - get_config
   
 variables:
   ANSIBLE_HOST_KEY_CHECKING: "False"
@@ -14,38 +16,34 @@ before_script:
 
 
 Connect to Cisco Sandbox with Cookie:
-  stage: vpn_connect
+  stage: vpn_connect1
   script:
     - cookie=$(cat Cookie)
     - openconnect -b -v --user=$VPN_USER -q --cookie=$cookie devnetsandbox-us-sjc.cisco.com:$VPN_PORT --printcookie > Cookie
     - ping $CSR1000V_HOST -c 4
-    - touch inventory
-    - echo "CSR1000V ansible_host=${CSR1000V_HOST}" > inventory
-    - ansible-playbook test_playbook -i inventory -e "CSR1000V_HOST=${CSR1000V_HOST} CSR1000V_USER=${CSR1000V_USER} CSR1000V_PASS=${CSR1000V_PASS}"
-    - cat /tempfile
-  cache:
-    paths:
-      - Cookie
-  artifacts:
-    paths:
-      - inventory
 
 Connect to Cisco Sandbox with Password:
-  stage: vpn_connect
+  stage: vpn_connect2
   script:
     - echo $VPN_PASS | openconnect -b -v --user=$VPN_USER -q --passwd-on-stdin devnetsandbox-us-sjc.cisco.com:$VPN_PORT --printcookie > Cookie
     - ping $CSR1000V_HOST -c 4
+  cache:
+    paths:
+      - Cookie
+  when: on_failure
+      
+Connect to Cisco Sandbox and backup config:
+  stage: get_config
+  script:
+    - cookie=$(cat Cookie)
+    - openconnect -b -v --user=$VPN_USER -q --cookie=$cookie devnetsandbox-us-sjc.cisco.com:$VPN_PORT
     - touch inventory
     - echo "CSR1000V ansible_host=${CSR1000V_HOST}" > inventory
     - ansible-playbook test_playbook -i inventory -e "CSR1000V_HOST=${CSR1000V_HOST} CSR1000V_USER=${CSR1000V_USER} CSR1000V_PASS=${CSR1000V_PASS}"
     - cat /tempfile
-  cache:
-    paths:
-      - Cookie
   artifacts:
     paths:
       - inventory
-  when: on_failure
       
 after_script:
  #- cat $OC_PID
