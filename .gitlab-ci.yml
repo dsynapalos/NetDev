@@ -4,7 +4,7 @@ stages:
   - vpn_connect
   
 variables:
-  - ANSIBLE_HOST_KEY_CHECKING: False
+  - ANSIBLE_HOST_KEY_CHECKING: "False"
   
 before_script:
   - apt-get update -y
