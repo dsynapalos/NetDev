@@ -25,6 +25,6 @@
       lineinfile:
         path: tempfile
         state: present
-        line: {{ item }}
+        line: "{{ item }}"
       with_items:
         config.stdout_lines[0]
