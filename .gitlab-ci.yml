@@ -44,7 +44,7 @@ Connect to Cisco Sandbox and backup config:
   artifacts:
     paths:
       - /tempfile
-      
+  when: always
 after_script:
  #- cat $OC_PID
  #- pkill -2 -e -F $OC_PID
