@@ -1,8 +1,7 @@
 image: ubuntu:18.04
 
 stages:
-  - vpn_connect_ck
-  - vpn_connect_ps
+  - vpn_connect
   - get_config
   
 variables:
@@ -16,21 +15,25 @@ before_script:
 
 
 Connect to Cisco Sandbox with Cookie:
-  stage: vpn_connect_ck
+  stage: vpn_connect
   script:
     - cookie=$(cat Cookie)
     - openconnect -b -v --user=$VPN_USER -q --cookie=$cookie devnetsandbox-us-sjc.cisco.com:$VPN_PORT --printcookie > Cookie
     - ping $CSR1000V_HOST -c 4
+  cache:
+    paths:
+      - Cookie
+  allow_failure: yes
 
 Connect to Cisco Sandbox with Password:
-  stage: vpn_connect_ps
+  stage: vpn_connect
   script:
     - echo $VPN_PASS | openconnect -b -v --user=$VPN_USER -q --passwd-on-stdin devnetsandbox-us-sjc.cisco.com:$VPN_PORT --printcookie > Cookie
     - ping $CSR1000V_HOST -c 4
   cache:
     paths:
       - Cookie
-  when: on_failure
+  allow_failure: yes
       
 Connect to Cisco Sandbox and backup config:
   stage: get_config
@@ -45,6 +48,7 @@ Connect to Cisco Sandbox and backup config:
     paths:
       - /tempfile
   when: always
+  
 after_script:
  #- cat $OC_PID
  #- pkill -2 -e -F $OC_PID
