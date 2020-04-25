@@ -24,6 +24,7 @@ Connect to Cisco Sandbox:
     - echo "CSR1000V ansible_host=${CSR1000V_HOST}" > inventory
     - cat inventory
     - ansible-playbook test_playbook -i inventory -e "CSR1000V_HOST=${CSR1000V_HOST} CSR1000V_USER=${CSR1000V_USER} CSR1000V_PASS=${CSR1000V_PASS}"
+    - cat tempfile
   cache:
     paths:
       - Cookie
