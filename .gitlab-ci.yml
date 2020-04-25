@@ -20,6 +20,9 @@ Connect to Cisco Sandbox with Cookie:
     - cookie=$(cat Cookie)
     - openconnect -b -v --user=$VPN_USER -q --cookie=$cookie devnetsandbox-us-sjc.cisco.com:$VPN_PORT --printcookie > Cookie
     - ping $CSR1000V_HOST -c 4
+  cache:
+    paths:
+      - Cookie
   artifacts:
     paths:
       - Cookie
@@ -30,6 +33,9 @@ Connect to Cisco Sandbox with Password:
   script:
     - echo $VPN_PASS | openconnect -b -v --user=$VPN_USER -q --passwd-on-stdin devnetsandbox-us-sjc.cisco.com:$VPN_PORT --printcookie > Cookie
     - ping $CSR1000V_HOST -c 4
+  cache:
+    paths:
+      - Cookie
   artifacts:
     paths:
       - Cookie
@@ -37,6 +43,8 @@ Connect to Cisco Sandbox with Password:
       
 Connect to Cisco Sandbox and backup config:
   stage: get_config
+  dependencies: 
+    - vpn_connect
   script:
     - cookie=$(cat Cookie)
     - openconnect -b -v --user=$VPN_USER -q --cookie=$cookie devnetsandbox-us-sjc.cisco.com:$VPN_PORT
@@ -46,8 +54,9 @@ Connect to Cisco Sandbox and backup config:
     - cat /tempfile
   artifacts:
     paths:
+      - Cookie
       - /tempfile
-  when: always
+  when: on_success
   
 after_script:
  #- cat $OC_PID
