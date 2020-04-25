@@ -29,8 +29,7 @@ Connect to Cisco Sandbox with Cookie:
   artifacts:
     paths:
       - inventory
-  allow_failure: true
-      
+
 Connect to Cisco Sandbox with Password:
   stage: vpn_connect
   script:
