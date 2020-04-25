@@ -20,4 +20,11 @@
         
     - debug: var=config.stdout_lines
       
-    - copy: content="{{ config.stdout_lines }}" dest=tempfile
+    #- copy: content="{{ config.stdout_lines }}" dest=tempfile
+    - name: Validate the sudoers file before saving
+      lineinfile:
+        path: tempfile
+        state: present
+        line: {{ item }}
+      with_items:
+        config.stdout_lines[0]
