@@ -13,18 +13,15 @@ before_script:
   - pip3 install ansible paramiko
 
 
-Connect to Cisco Sandbox:
+Connect to Cisco Sandbox with Cookie:
   stage: vpn_connect
   script:
-    - touch $OC_PID
     - cookie=$(cat Cookie)
-    - echo $VPN_PASS | openconnect -b -v --pid-file=$OC_PID --user=$VPN_USER -q --cookie=$cookie --passwd-on-stdin devnetsandbox-us-sjc.cisco.com:$VPN_PORT --printcookie > Cookie
+    - openconnect -b -v --user=$VPN_USER -q --cookie=$cookie devnetsandbox-us-sjc.cisco.com:$VPN_PORT --printcookie > Cookie
     - ping $CSR1000V_HOST -c 4
     - touch inventory
     - echo "CSR1000V ansible_host=${CSR1000V_HOST}" > inventory
-    - cat inventory
-    #- touch tempfile
-    - ansible-playbook test_playbook -i inventory -e "CSR1000V_HOST=${CSR1000V_HOST} CSR1000V_USER=${CSR1000V_USER} CSR1000V_PASS=${CSR1000V_PASS}" -vvvv
+    - ansible-playbook test_playbook -i inventory -e "CSR1000V_HOST=${CSR1000V_HOST} CSR1000V_USER=${CSR1000V_USER} CSR1000V_PASS=${CSR1000V_PASS}"
     - cat /tempfile
   cache:
     paths:
@@ -32,6 +29,24 @@ Connect to Cisco Sandbox:
   artifacts:
     paths:
       - inventory
+  allow_failure: true
+      
+Connect to Cisco Sandbox with Password:
+  stage: vpn_connect
+  script:
+    - echo $VPN_PASS | openconnect -b -v --user=$VPN_USER -q --passwd-on-stdin devnetsandbox-us-sjc.cisco.com:$VPN_PORT --printcookie > Cookie
+    - ping $CSR1000V_HOST -c 4
+    - touch inventory
+    - echo "CSR1000V ansible_host=${CSR1000V_HOST}" > inventory
+    - ansible-playbook test_playbook -i inventory -e "CSR1000V_HOST=${CSR1000V_HOST} CSR1000V_USER=${CSR1000V_USER} CSR1000V_PASS=${CSR1000V_PASS}"
+    - cat /tempfile
+  cache:
+    paths:
+      - Cookie
+  artifacts:
+    paths:
+      - inventory
+  when: on_failure
       
 after_script:
  #- cat $OC_PID
