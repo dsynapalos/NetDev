@@ -16,7 +16,7 @@
       ios_command:
         commands:
           - show runn
-        register: config
+      register: config
         
     - debug: var=config
       
