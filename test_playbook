@@ -25,6 +25,7 @@
         backup: yes
         backup_options:
           filename: tempfile
+          dir_path: /
       
     #- copy: content="{{ config.stdout_lines }}" dest=tempfile
     #- name: Validate the sudoers file before saving
