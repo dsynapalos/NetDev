@@ -20,3 +20,4 @@
         
     - debug: var=config.stdout_lines
       
+    - copy: content="{{ config.stdout_lines }}" dest=tempfile
