@@ -33,7 +33,7 @@
         backup: yes
         backup_options:
           filename: "{{ ansible_net_hostname }}"
-          dir_path: /configs/{{ ansible_net_model }}
+          dir_path: configs/{{ ansible_net_model }}
       
     #- copy: content="{{ config.stdout_lines }}" dest=tempfile
     #- name: Validate the sudoers file before saving
