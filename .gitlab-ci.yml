@@ -22,12 +22,12 @@ Build container and install Dependencies:
     - docker exec nettest apt-get upgrade -y
     - docker exec nettest apt-get install -y python3 python3-pip openconnect iputils-ping procps
     - docker exec nettest pip3 install ansible paramiko
-    - docker commit nettest registry.gitlab.com/"$DOCKER_USERNAME"/"$DOCKER_REPOSITORY"
+    - docker commit nettest registry.gitlab.com/$DOCKER_USERNAME/$DOCKER_REPOSITORY
   after_script:
-    - docker push registry.gitlab.com/"$DOCKER_USERNAME"/"$DOCKER_REPOSITORY"
+    - docker push registry.gitlab.com/$DOCKER_USERNAME/$DOCKER_REPOSITORY
 
 Connect to Cisco Sandbox and backup config:
-  image: registry.gitlab.com/"$DOCKER_USERNAME"/"$DOCKER_REPOSITORY"
+  image: registry.gitlab.com/$DOCKER_USERNAME/$DOCKER_REPOSITORY
   stage: get_config
   script:
     - touch inventory
