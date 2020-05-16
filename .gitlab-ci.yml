@@ -16,7 +16,7 @@ Try using container from repository:
   stage: try_container
   allow_failure: yes
   script:
-    - docker info
+    - echo "Success"
   image: registry.gitlab.com/$DOCKER_USERNAME/$DOCKER_REPOSITORY
 
 
