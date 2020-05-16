@@ -24,7 +24,7 @@ Build container and install Dependencies:
     - docker exec nettest pip3 install ansible paramiko
     - docker commit nettest
   after_script:
-    - docker push nettest registry.gitlab.com/"$DOCKER_USERNAME"/"$DOCKER_REPOSITORY"
+    - docker push registry.gitlab.com/"$DOCKER_USERNAME"/"$DOCKER_REPOSITORY"
 
 Connect to Cisco Sandbox and backup config:
   image: dsynapalos/net_test
