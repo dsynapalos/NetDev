@@ -9,6 +9,7 @@
     - ansible_user: "{{ CSR1000V_USER }}"
     - ansible_password: "{{ CSR1000V_PASS }}"
     - ansible_network_os: ios
+    - ansible_ssh_port: "{{ CSR1000V_SSH }}"
   
   tasks:
 
