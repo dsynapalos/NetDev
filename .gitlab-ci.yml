@@ -3,6 +3,7 @@ services:
   - name: docker:19.03.1-dind
 
 stages:
+  - try_container
   - build_container
   - get_config
 
@@ -11,11 +12,21 @@ variables:
   DOCKER_TLS_CERTDIR: ""
   ANSIBLE_HOST_KEY_CHECKING: "False"
 
+Try using container from repository:
+  before_script:
+    - docker info
+    - docker login registry.gitlab.com -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+  image: registry.gitlab.com/$DOCKER_USERNAME/$DOCKER_REPOSITORY
+  stage: try_container
+  allow_failure: yes
+
+
+
 Build container and install Dependencies:
   stage: build_container
   before_script:
-  - docker info
-  - docker login registry.gitlab.com -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+    - docker info
+    - docker login registry.gitlab.com -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
   script:
     - docker run -t -d --name nettest ubuntu:18.04 /bin/bash
     - docker exec nettest apt-get update -y
@@ -24,10 +35,11 @@ Build container and install Dependencies:
     - docker exec nettest pip3 install ansible paramiko
     - docker commit nettest registry.gitlab.com/$DOCKER_REPOSITORY
   after_script:
-    - docker push registry.gitlab.com/$DOCKER_REPOSITORY
+    - docker push registry.gitlab.com/$DOCKER_USERNAME/$DOCKER_REPOSITORY
+  when: on_failure
 
 Connect to Cisco Sandbox and backup config:
-  image: registry.gitlab.com/$DOCKER_REPOSITORY
+  image: registry.gitlab.com/$DOCKER_USERNAME/$DOCKER_REPOSITORY
   stage: get_config
   script:
     - touch inventory
