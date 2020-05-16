@@ -17,7 +17,9 @@
       ios_facts:
         gather_subset: all
       register: facts
+      
     - debug: var=facts
+    
     - name: run multiple commands on remote nodes
       ios_command:
         commands:
@@ -30,8 +32,8 @@
       ios_config:
         backup: yes
         backup_options:
-          filename: temp
-          dir_path: /
+          filename: "{{ ansible_net_hostname }}"
+          dir_path: /configs/{{ ansible_net_model }}
       
     #- copy: content="{{ config.stdout_lines }}" dest=tempfile
     #- name: Validate the sudoers file before saving
