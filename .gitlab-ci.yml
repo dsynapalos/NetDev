@@ -27,7 +27,7 @@ Build container and install Dependencies:
     - docker push registry.gitlab.com/"$DOCKER_USERNAME"/"$DOCKER_REPOSITORY"
 
 Connect to Cisco Sandbox and backup config:
-  image: dsynapalos/nettest
+  image: registry.gitlab.com/"$DOCKER_USERNAME"/"$DOCKER_REPOSITORY"
   stage: get_config
   script:
     - touch inventory
