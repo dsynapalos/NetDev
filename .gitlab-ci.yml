@@ -17,7 +17,7 @@ Build container and install Dependencies:
   - docker info
   - docker login registry.gitlab.com -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
   script:
-    - docker run -d --name nettest ubuntu:18.04 /bin/bash
+    - docker run -d --name nettest ubuntu:18.04 -t /bin/bash
     - docker exec -d nettest apt-get update -y
     - docker exec -d nettest apt-get upgrade -y
     - docker exec -d nettest apt-get install -y python3 python3-pip openconnect iputils-ping procps
