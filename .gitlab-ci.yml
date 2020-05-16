@@ -13,13 +13,11 @@ variables:
   ANSIBLE_HOST_KEY_CHECKING: "False"
 
 Try using container from repository:
-  before_script:
-    - docker info
-    - docker login registry.gitlab.com -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
-  image: registry.gitlab.com/$DOCKER_USERNAME/$DOCKER_REPOSITORY
   stage: try_container
   allow_failure: yes
-
+  script:
+    - docker info
+  image: registry.gitlab.com/$DOCKER_USERNAME/$DOCKER_REPOSITORY
 
 
 Build container and install Dependencies:
