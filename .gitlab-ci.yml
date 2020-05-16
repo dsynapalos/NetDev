@@ -18,10 +18,10 @@ Build container and install Dependencies:
   - docker login registry.gitlab.com -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
   script:
     - docker run -t -d --name nettest ubuntu:18.04 /bin/bash
-    - docker exec -d nettest apt-get update -y
-    - docker exec -d nettest apt-get upgrade -y
-    - docker exec -d nettest apt-get install -y python3 python3-pip openconnect iputils-ping procps
-    - docker exec -d nettest pip3 install ansible paramiko
+    - docker exec nettest apt-get update -y
+    - docker exec nettest apt-get upgrade -y
+    - docker exec nettest apt-get install -y python3 python3-pip openconnect iputils-ping procps
+    - docker exec nettest pip3 install ansible paramiko
     - docker commit nettest
   after_script:
     - docker push registry.gitlab.com/"$DOCKER_USERNAME"/"DOCKER_REPOSITORY"
