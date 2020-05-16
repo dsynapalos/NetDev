@@ -30,7 +30,7 @@
       ios_config:
         backup: yes
         backup_options:
-          filename: {{ ansible_facts. }}
+          filename: temp
           dir_path: /
       
     #- copy: content="{{ config.stdout_lines }}" dest=tempfile
