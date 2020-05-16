@@ -12,7 +12,12 @@
     - ansible_ssh_port: "{{ CSR1000V_SSH }}"
   
   tasks:
-
+    
+    - name: Gather all legacy facts
+      ios_facts:
+        gather_subset: all
+      register: facts
+    - debug: var=facts
     - name: run multiple commands on remote nodes
       ios_command:
         commands:
@@ -25,7 +30,7 @@
       ios_config:
         backup: yes
         backup_options:
-          filename: tempfile
+          filename: {{ ansible_facts. }}
           dir_path: /
       
     #- copy: content="{{ config.stdout_lines }}" dest=tempfile
