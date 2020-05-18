@@ -17,13 +17,15 @@ Build container and install Dependencies:
   rules:
     - changes:
       - Dockerfile
+      - .gitlab-ci.yml
       when: on_success
     - when: never
   before_script:
     - docker info
     - docker login registry.gitlab.com -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
   script:
-    - docker run -t -d --name nettest Dockerfile /bin/bash
+    - docker build Dockerfile -t registry.gitlab.com/$DOCKER_USERNAME/$DOCKER_REPOSITORY
+    - docker run -t -d --name nettest registry.gitlab.com/$DOCKER_USERNAME/$DOCKER_REPOSITORY
     - docker commit nettest registry.gitlab.com/$DOCKER_REPOSITORY
   after_script:
     - docker push registry.gitlab.com/$DOCKER_USERNAME/$DOCKER_REPOSITORY
