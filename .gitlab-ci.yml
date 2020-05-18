@@ -25,7 +25,7 @@ Build container and install Dependencies:
     - docker login registry.gitlab.com -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
   script:
     - docker build . -t registry.gitlab.com/$DOCKER_USERNAME/$DOCKER_REPOSITORY
-    - docker run -t -d --name nettest registry.gitlab.com/$DOCKER_USERNAME/$DOCKER_REPOSITORY
+    - docker run -t -d --rm --name nettest registry.gitlab.com/$DOCKER_USERNAME/$DOCKER_REPOSITORY
     - docker commit nettest registry.gitlab.com/$DOCKER_REPOSITORY
   after_script:
     - docker push registry.gitlab.com/$DOCKER_USERNAME/$DOCKER_REPOSITORY
