@@ -22,19 +22,20 @@ Try using container from repository:
 
 Build container and install Dependencies:
   stage: build_container
+  rules:
+    - changes:
+      - Dockerfile
+      when: on_success
+    - when: never
   before_script:
     - docker info
     - docker login registry.gitlab.com -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
   script:
-    - docker run -t -d --name nettest ubuntu:18.04 /bin/bash
-    - docker exec nettest apt-get update -y
-    - docker exec nettest apt-get upgrade -y
-    - docker exec nettest apt-get install -y python3 python3-pip openconnect iputils-ping procps
-    - docker exec nettest pip3 install ansible paramiko
+    - docker run -t -d --name nettest Dockerfile /bin/bash
     - docker commit nettest registry.gitlab.com/$DOCKER_REPOSITORY
   after_script:
     - docker push registry.gitlab.com/$DOCKER_USERNAME/$DOCKER_REPOSITORY
-  when: on_failure
+
 
 Connect to Cisco Sandbox and backup config:
   image: registry.gitlab.com/$DOCKER_USERNAME/$DOCKER_REPOSITORY
