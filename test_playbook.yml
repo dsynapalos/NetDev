@@ -30,7 +30,7 @@
     
     - name: clone GitLab Project
       git:
-        repo: "git@gitlab.com:dsynapalos/configs_inv.git?private_token={{ GITLAB_TOKEN }}"
+        repo: "https://gitlab.com/dsynapalos/configs_inv.git?private_token={{ GITLAB_TOKEN }}"
         dest: /tmp/configs
     
     - name: configurable backup path
