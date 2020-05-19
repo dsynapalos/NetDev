@@ -30,7 +30,7 @@
     
     - name: clone GitLab Project
       git:
-        repo: "https://oauth2:{{ GITLAB_TOKEN | urlencode }}@gitlab.com/dsynapalos/configs_inv.git"
+        repo: "https://oauth2:{{ GITLAB_TOKEN | urlencode }}@gitlab.com/{{ DOCKER_USERNAME }}/configs_inv.git"
         dest: /tmp/configs
     
     - name: configurable backup path
@@ -49,7 +49,7 @@
       
     - name: clone GitLab Project
       gitlab_project:
-        api_url: https://gitlab.com/dsynapalos
+        api_url: "https://gitlab.com/{{ DOCKER_USERNAME }}"
         api_token: "{{ GITLAB_TOKEN }}"
         validate_certs: False
         name: configs_inv
