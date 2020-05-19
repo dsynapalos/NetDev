@@ -31,21 +31,21 @@
     - name: clone GitLab Project
       git:
         repo: "https://{{ GITLAB_TOKEN }}@gitlab.com/dsynapalos/configs_inv"
-        dest: ~/
+        dest: /tmp
     
     - name: configurable backup path
       ios_config:
         backup: yes
         backup_options:
           filename: "{{ ansible_net_hostname }}"
-          dir_path: ~/configs/{{ ansible_net_model }}
+          dir_path: /tmp/configs/{{ ansible_net_model }}
           
     - name: commit conf
       ios_config:
         backup: yes
         backup_options:
           filename: "{{ ansible_net_hostname }}"
-          dir_path: ~/configs/{{ ansible_net_model }}
+          dir_path: /tmp/configs/{{ ansible_net_model }}
       
     - name: clone GitLab Project
       gitlab_project:
