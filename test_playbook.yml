@@ -28,12 +28,32 @@
         
     - debug: var=config.stdout_lines
     
+    - name: clone GitLab Project
+      git:
+        repo: "https://{{ GITLAB_TOKEN }}@gitlab.com/dsynapalos/configs_inv"
+        dest: ~/
+    
     - name: configurable backup path
       ios_config:
         backup: yes
         backup_options:
           filename: "{{ ansible_net_hostname }}"
-          dir_path: configs/{{ ansible_net_model }}
+          dir_path: ~/configs/{{ ansible_net_model }}
+          
+    - name: commit conf
+      ios_config:
+        backup: yes
+        backup_options:
+          filename: "{{ ansible_net_hostname }}"
+          dir_path: ~/configs/{{ ansible_net_model }}
+      
+    - name: clone GitLab Project
+      gitlab_project:
+        api_url: https://gitlab.com/dsynapalos
+        api_token: "{{ GITLAB_TOKEN }}"
+        validate_certs: False
+        name: configs_inv
+        state: present  
       
     #- copy: content="{{ config.stdout_lines }}" dest=tempfile
     #- name: Validate the sudoers file before saving
