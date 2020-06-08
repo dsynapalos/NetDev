@@ -42,19 +42,17 @@
           filename: "{{ ansible_net_hostname }}"
           dir_path: "{{ config_folder }}/{{ ansible_net_model }}"
     
-
-    - name: check differences
-      shell: git diff HEAD
-      args:
-        chdir: "{{ config_folder }}"
-      register: diffs
-
     - name: Add configs
       shell: "git add ."
       args:
         chdir: "{{ config_folder }}"
       register: gitadd
-      when: diffs.stdout
+      
+    - name: check differences
+      shell: git diff HEAD
+      args:
+        chdir: "{{ config_folder }}"
+      register: diffs
 
     - name: get time
       shell: TZ=Europe/Athens date '+%Y-%m-%d %H:%M:%S'
