@@ -43,11 +43,11 @@
           dir_path: "{{ config_folder }}/{{ ansible_net_model }}"
     
     - name: check differences
-      shell: ll 
+      shell: ls -al 
       args:
         chdir: "{{ config_folder }}"
     - name: check differences
-      shell: ll 
+      shell: ls -al 
       args:
         chdir: "{{ config_folder }}/{{ ansible_net_model }}"
 
