@@ -42,24 +42,15 @@
           filename: "{{ ansible_net_hostname }}"
           dir_path: "{{ config_folder }}/{{ ansible_net_model }}"
     
-    - name: check differences
-      shell: ls -al 
-      args:
-        chdir: "{{ config_folder }}"
-    - name: check differences
-      shell: ls -al 
-      args:
-        chdir: "{{ config_folder }}/{{ ansible_net_model }}"
 
-    
     - name: check differences
-      shell: git diff
+      shell: git diff HEAD
       args:
         chdir: "{{ config_folder }}"
       register: diffs
 
     - name: Add configs
-      shell: "git add *"
+      shell: "git add ."
       args:
         chdir: "{{ config_folder }}"
       register: gitadd
