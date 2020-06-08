@@ -5,11 +5,13 @@
   connection: network_cli
 
   vars:
+  
     - become_pass: "{{ CSR1000V_PASS }}"
     - ansible_user: "{{ CSR1000V_USER }}"
     - ansible_password: "{{ CSR1000V_PASS }}"
     - ansible_network_os: ios
     - ansible_ssh_port: "{{ CSR1000V_SSH }}"
+    - config_folder: /tmp/configs
   
   tasks:
     
@@ -31,25 +33,35 @@
     - name: clone GitLab Project
       git:
         repo: "https://oauth2:{{ GITLAB_TOKEN | urlencode }}@gitlab.com/{{ DOCKER_USERNAME }}/configs_inv.git"
-        dest: /tmp/configs
+        dest: {{ config_folder }}
     
     - name: configurable backup path
       ios_config:
         backup: yes
         backup_options:
           filename: "{{ ansible_net_hostname }}"
-          dir_path: /tmp/configs/{{ ansible_net_model }}
+          dir_path: {{ config_folder }}/{{ ansible_net_model }}
+    
+    - name: check differences
+      shell: ll 
+      args:
+        chdir: {{ config_folder }}
+    - name: check differences
+      shell: ll 
+      args:
+        chdir: {{ config_folder }}/{{ ansible_net_model }}
+
     
     - name: check differences
       shell: git diff
       args:
-        chdir: /tmp/configs
+        chdir: {{ config_folder }}
       register: diffs
 
     - name: Add configs
       shell: "git add *"
       args:
-        chdir: /tmp/configs
+        chdir: {{ config_folder }}
       register: gitadd
       when: diffs.stdout
 
@@ -61,13 +73,13 @@
     - name: Git commit
       shell: git commit -m "Ansible Managed Backup - {{ timestamp.stdout }}"
       args:
-        chdir: /tmp/configs
+        chdir: {{ config_folder }}
       register: gitcommit
       when: diffs.stdout
 
     - name: Git push
       shell: git push origin master
       args:
-        chdir: /tmp/configs
+        chdir: {{ config_folder }}
       when: diffs.stdout
       register: gitpush
