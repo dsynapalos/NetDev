@@ -43,33 +43,33 @@
         repo: "https://oauth2:{{ GITLAB_TOKEN | urlencode }}@gitlab.com/{{ DOCKER_USERNAME }}/configs_inv.git"
         dest: "{{ config_folder }}"
     
-    - name: Conform inventory
+    - name: Enforce inventory
       lineinfile:
         path: "{{ config_folder }}/ansible_managed_inventory"
         regexp: '^[all_hosts]$'
         line: '[all_hosts]'
         create: yes
     
-    - name: Conform inventory
+    - name: Conform networking type group
       lineinfile:
         path: "{{ config_folder }}/ansible_managed_inventory"
-        regexp: '^{{ facts.ansible_net_model }}$'
+        regexp: '^{{ facts.ansible_facts.ansible_net_model }}$'
         insertafter: '[all_hosts]'
-        line: '{{ facts.ansible_net_model }}'
+        line: '{{ facts.ansible_facts.ansible_net_model }}'
         
-    - name: Conform inventory
+    - name: Conform networking type object
       lineinfile:
         path: "{{ config_folder }}/ansible_managed_inventory"
-        regexp: '^[{{ facts.ansible_net_model }}]$'
-        insertafter: '{{ facts.ansible_net_model }}'
-        line: '[{{ facts.ansible_net_model }}]'
+        regexp: '^[{{ facts.ansible_facts.ansible_net_model }}]$'
+        insertafter: '{{ facts.ansible_facts.ansible_net_model }}'
+        line: '[{{ facts.ansible_facts.ansible_net_model }}]'
         
     - name: Update inventory
       lineinfile:
         path: "{{ config_folder }}/ansible_managed_inventory"
-        regexp: '^{{ facts.ansible_net_hostname }}.*$'
-        insertafter: '[{{ facts.ansible_net_model }}]'
-        line: '{{ facts.ansible_net_hostname }} ansible_host={{ ansible_host }} ansible_ssh_port={{ ansible_ssh_port }}'
+        regexp: '^{{ facts.ansible_facts.ansible_net_hostname }}.*$'
+        insertafter: '[{{ facts.ansible_facts.ansible_net_model }}]'
+        line: '{{ facts.ansible_facts.ansible_net_hostname }} ansible_host={{ ansible_host }} ansible_ssh_port={{ ansible_ssh_port }}'
         
     - name: configurable backup path
       ios_config:
