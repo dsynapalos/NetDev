@@ -46,15 +46,15 @@
     - name: Enforce inventory
       lineinfile:
         path: "{{ config_folder }}/ansible_managed_inventory"
-        regexp: '^[all_hosts]$'
-        line: '[all_hosts]'
+        regexp: '^[all_hosts:children]$'
+        line: '[all_hosts:children]'
         create: yes
     
     - name: Conform networking type group
       lineinfile:
         path: "{{ config_folder }}/ansible_managed_inventory"
         regexp: '^{{ facts.ansible_facts.ansible_net_model }}$'
-        insertafter: '[all_hosts]'
+        insertafter: '[all_hosts:children]'
         line: '{{ facts.ansible_facts.ansible_net_model }}'
         
     - name: Conform networking type object
