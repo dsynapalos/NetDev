@@ -4,6 +4,7 @@
   become_method: enable
   connection: network_cli
   gather_facts: yes
+  ansible_python_interpreter: /usr/bin/python3
   
   vars:
   
