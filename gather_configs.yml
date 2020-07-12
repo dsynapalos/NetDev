@@ -63,24 +63,24 @@
       ios_config:
         backup: yes
         backup_options:
-          filename: "{{ net_hostname }}"
-          dir_path: "{{ config_folder }}/{{ net_model }}"
+          filename: "{{ ansible_facts.net_hostname }}"
+          dir_path: "{{ config_folder }}/{{ ansible_facts.net_model }}"
       when: ansible_facts.net_iostype == "IOS-XE"
       
     - name: configurable backup path
       iosxr_config:
         backup: yes
         backup_options:
-          filename: "{{ net_hostname }}"
-          dir_path: "{{ config_folder }}/{{ net_model }}"
+          filename: "{{ ansible_facts.net_hostname }}"
+          dir_path: "{{ config_folder }}/{{ ansible_facts.net_model }}"
       when: ansible_facts.net_iostype == "IOS-XR"
       
     - name: configurable backup path
       nxos_config:
         backup: yes
         backup_options:
-          filename: "{{ net_hostname }}"
-          dir_path: "{{ config_folder }}/{{ net_model }}"
+          filename: "{{ ansible_facts.net_hostname }}"
+          dir_path: "{{ config_folder }}/{{ ansible_facts.net_model }}"
       when: ansible_facts.net_iostype == "NX-OS"
     
     - name: Add configs
