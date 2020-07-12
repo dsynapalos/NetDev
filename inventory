@@ -1,5 +1,7 @@
 [ALL_OS:children]
 IOS
+IOSXR
+NXOS
 
 [IOS]
 CSR1000V ansible_host=ios-xe-mgmt-latest.cisco.com
