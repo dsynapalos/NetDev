@@ -25,21 +25,6 @@
         - {name: "user.name",  value: "{{ DOCKER_USERNAME }}" }
         - {name: "user.email", value: "{{ DOCKER_USERNAME }}@gmail.com" }
     
-    - name: Gather all legacy facts
-      ios_facts:
-        gather_subset: all
-      register: facts
-      
-    - debug: var=facts
-    
-    - name: run multiple commands on remote nodes
-      ios_command:
-        commands:
-          - show runn
-      register: config
-        
-    - debug: var=config.stdout_lines
-    
     - name: clone GitLab Project
       git:
         repo: "https://oauth2:{{ GITLAB_TOKEN | urlencode }}@gitlab.com/{{ DOCKER_USERNAME }}/configs_inv.git"
@@ -79,6 +64,23 @@
         backup_options:
           filename: "{{ ansible_net_hostname }}"
           dir_path: "{{ config_folder }}/{{ ansible_net_model }}"
+      when: {{ ansible_facts.net_iostype }} == IOS-XE
+      
+    - name: configurable backup path
+      iosxr_config:
+        backup: yes
+        backup_options:
+          filename: "{{ ansible_net_hostname }}"
+          dir_path: "{{ config_folder }}/{{ ansible_net_model }}"
+      when: {{ ansible_facts.net_iostype }} == IOS-XR
+      
+    - name: configurable backup path
+      nxos_config:
+        backup: yes
+        backup_options:
+          filename: "{{ ansible_net_hostname }}"
+          dir_path: "{{ config_folder }}/{{ ansible_net_model }}"
+      when: {{ ansible_facts.net_iostype }} == NX-OS
     
     - name: Add configs
       shell: "git add ."
