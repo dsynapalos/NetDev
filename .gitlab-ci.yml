@@ -35,9 +35,7 @@ Connect to Cisco Sandbox and backup config:
   image: registry.gitlab.com/$DOCKER_USERNAME/$DOCKER_REPOSITORY
   stage: get_config
   script:
-    - touch inventory
-    - echo "CSR1000V ansible_host=${CSR1000V_HOST}" > inventory
-    - ansible-playbook gather_configs.yml -i inventory -e "DOCKER_USERNAME=${DOCKER_USERNAME} GITLAB_TOKEN=${GITLAB_TOKEN} CSR1000V_HOST=${CSR1000V_HOST} CSR1000V_USER=${CSR1000V_USER} CSR1000V_PASS=${CSR1000V_PASS} CSR1000V_SSH=${CSR1000V_SSH}" -vvv
+    - ansible-playbook gather_configs.yml -i inventory -e "DOCKER_USERNAME=${DOCKER_USERNAME} GITLAB_TOKEN=${GITLAB_TOKEN} CSR1000V_USER=${CSR1000V_USER} CSR1000V_PASS=${CSR1000V_PASS} CSR1000V_SSH=${CSR1000V_SSH}" -vvv
   artifacts:
     paths:
       - configs
