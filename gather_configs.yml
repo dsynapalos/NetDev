@@ -14,6 +14,8 @@
     - config_folder: /tmp/configs
   
   tasks:
+    - debug: msg={{ ansible_facts }}
+  
     - name: Setup default git configuration
       git_config:
         name: "{{ item.name }}"
