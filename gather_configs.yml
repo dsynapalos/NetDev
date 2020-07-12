@@ -40,46 +40,46 @@
     - name: Conform networking type group
       lineinfile:
         path: "{{ config_folder }}/ansible_managed_inventory"
-        regexp: '^{{ ansible_facts.ansible_net_model }}$'
+        regexp: '^{{ ansible_facts.net_model }}$'
         insertafter: '[all_hosts:children]'
-        line: '{{ ansible_facts.ansible_net_model }}'
+        line: '{{ ansible_facts.net_model }}'
         
     - name: Conform networking type object
       lineinfile:
         path: "{{ config_folder }}/ansible_managed_inventory"
-        regexp: '^[{{ ansible_facts.ansible_net_model }}]$'
-        insertafter: '{{ ansible_facts.ansible_net_model }}'
-        line: '[{{ ansible_facts.ansible_net_model }}]'
+        regexp: '^[{{ ansible_facts.net_model }}]$'
+        insertafter: '{{ ansible_facts.net_model }}'
+        line: '[{{ ansible_facts.net_model }}]'
         
     - name: Update inventory
       lineinfile:
         path: "{{ config_folder }}/ansible_managed_inventory"
-        regexp: '^{{ ansible_facts.ansible_net_hostname }}.*$'
-        insertafter: '[{{ ansible_facts.ansible_net_model }}]'
-        line: '{{ ansible_facts.ansible_net_hostname }} ansible_host={{ ansible_host }} ansible_ssh_port={{ ansible_ssh_port }}'
+        regexp: '^{{ ansible_facts.net_hostname }}.*$'
+        insertafter: '[{{ ansible_facts.net_model }}]'
+        line: '{{ ansible_facts.net_hostname }} ansible_host={{ ansible_host }} ansible_ssh_port={{ ansible_ssh_port }}'
         
     - name: configurable backup path
       ios_config:
         backup: yes
         backup_options:
-          filename: "{{ ansible_net_hostname }}"
-          dir_path: "{{ config_folder }}/{{ ansible_net_model }}"
+          filename: "{{ net_hostname }}"
+          dir_path: "{{ config_folder }}/{{ net_model }}"
       when: ansible_facts['net_iostype']  == IOS-XE
       
     - name: configurable backup path
       iosxr_config:
         backup: yes
         backup_options:
-          filename: "{{ ansible_net_hostname }}"
-          dir_path: "{{ config_folder }}/{{ ansible_net_model }}"
+          filename: "{{ net_hostname }}"
+          dir_path: "{{ config_folder }}/{{ net_model }}"
       when: ansible_facts['net_iostype']  == IOS-XR
       
     - name: configurable backup path
       nxos_config:
         backup: yes
         backup_options:
-          filename: "{{ ansible_net_hostname }}"
-          dir_path: "{{ config_folder }}/{{ ansible_net_model }}"
+          filename: "{{ net_hostname }}"
+          dir_path: "{{ config_folder }}/{{ net_model }}"
       when: ansible_facts['net_iostype']  == NX-OS
     
     - name: Add configs
