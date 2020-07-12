@@ -5,4 +5,16 @@ IOS
 CSR1000V ansible_host=ios-xe-mgmt-latest.cisco.com
 
 [IOS:vars]
-ansible_network_os: ios
+ansible_network_os=ios
+
+[IOSXR]
+XR9000V ansible_host=sbx-iosxr-mgmt.cisco.com
+
+[IOSXR:vars]
+ansible_network_os=iosxr
+
+[NXOS]
+NX9000V ansible_host=sbx-nxos-mgmt.cisco.com
+
+[NXOS:vars]
+ansible_network_os=nxos
