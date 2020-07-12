@@ -1,0 +1,8 @@
+[all:children]
+IOS
+
+[IOS]
+CSR1000V ansible_host=ios-xe-mgmt-latest.cisco.com
+
+[IOS:vars]
+ansible_network_os: ios
