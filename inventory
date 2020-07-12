@@ -1,4 +1,4 @@
-[all:children]
+[ALL_OS:children]
 IOS
 
 [IOS]
