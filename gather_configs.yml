@@ -64,7 +64,7 @@
         backup_options:
           filename: "{{ net_hostname }}"
           dir_path: "{{ config_folder }}/{{ net_model }}"
-      when: ansible_facts['net_iostype']  == "IOS-XE"
+      when: ansible_facts.net_iostype  == "IOS-XE"
       
     - name: configurable backup path
       iosxr_config:
@@ -72,7 +72,7 @@
         backup_options:
           filename: "{{ net_hostname }}"
           dir_path: "{{ config_folder }}/{{ net_model }}"
-      when: ansible_facts['net_iostype']  == "IOS-XR"
+      when: ansible_facts.net_iostype  == "IOS-XR"
       
     - name: configurable backup path
       nxos_config:
@@ -80,7 +80,7 @@
         backup_options:
           filename: "{{ net_hostname }}"
           dir_path: "{{ config_folder }}/{{ net_model }}"
-      when: ansible_facts['net_iostype']  == "NX-OS"
+      when: ansible_facts.net_iostype  == "NX-OS"
     
     - name: Add configs
       shell: "git add ."
