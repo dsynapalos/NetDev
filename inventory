@@ -3,6 +3,9 @@ IOS
 IOSXR
 NXOS
 
+[ALL_OS:vars]
+ansible_python_interpreter=/usr/bin/python3
+
 [IOS]
 CSR1000V ansible_host=ios-xe-mgmt-latest.cisco.com
 
