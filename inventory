@@ -12,15 +12,26 @@ CSR1000V ansible_host=ios-xe-mgmt-latest.cisco.com
 [IOS:vars]
 ansible_network_os=ios
 ansible_user="{{ IOS_USER }}"
+ansible_become_password: "{{ IOS_PASS }}"
+ansible_password: "{{ IOS_PASS }}"
+ansible_ssh_port: "{{ CSR1000V_SSH }}"
 
 [IOSXR]
 XR9000V ansible_host=sbx-iosxr-mgmt.cisco.com
 
 [IOSXR:vars]
 ansible_network_os=iosxr
+ansible_user="{{ NXOS_USER }}"
+ansible_become_password: "{{ IOS_PASS }}"
+ansible_password: "{{ IOS_PASS }}"
+ansible_ssh_port: "{{ CSR1000V_SSH }}"
 
 [NXOS]
 NX9000V ansible_host=sbx-nxos-mgmt.cisco.com
 
 [NXOS:vars]
 ansible_network_os=nxos
+ansible_user="{{ NXOS_USER }}"
+ansible_become_password: "{{ NXOS_PASS }}"
+ansible_password: "{{ NXOS_PASS }}"
+ansible_ssh_port: "{{ CSR1000V_SSH }}"
