@@ -113,7 +113,7 @@
       iosxr_config:
         backup: yes
         backup_options:
-          filename: "{{ ansible_fact.net_config | regex_search('\\nhostname (.*)\\n') }}"
+          filename: "{{ ansible_fact.net_config | regex_search('\nhostname (.*)\n') }}"
           dir_path: "{{ config_folder }}/{{ ansible_facts.net_system }}-{{ ansible_facts.net_version }}"
       when: ansible_facts.net_system == 'iosxr'
       
