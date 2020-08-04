@@ -1,7 +1,6 @@
 ---
 - hosts: localhost
   become: yes
-  become_method: enable
   gather_facts: no
   
   vars:
