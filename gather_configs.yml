@@ -51,3 +51,4 @@
         backup_options:
           filename: "{{ hostname }}"
           dir_path: "{{ config_folder }}/{{ platform }}"
+    - debug: msg="{{inventory_dict}}"
