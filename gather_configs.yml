@@ -70,7 +70,7 @@
         path: "{{ config_folder }}/ansible_managed_inventory"
         regexp: "^[{{ ansible_facts.net_platform }}]$"
         insertafter: "{{ ansible_facts.net_platform }}"
-        line: "[{{ ansible_facts.net_platform }}]""
+        line: "[{{ ansible_facts.net_platform }}]"
       delegate_to: localhost
       when: ansible_facts.net_system == 'nxos'
 
@@ -95,8 +95,8 @@
     - name: Update nxos inventory
       lineinfile:
         path: "{{ config_folder }}/ansible_managed_inventory"
-        regexp: '^{{ ansible_facts.net_hostname }}.*$'
-        insertafter: '[{{ ansible_facts.net_platform }}]'
+        regexp: "^{{ ansible_facts.net_hostname }}.*$"
+        insertafter: "[{{ ansible_facts.net_platform }}]"
         line: "{{ ansible_facts.net_hostname }} ansible_host={{ ansible_host }} ansible_ssh_port={{ ansible_ssh_port }}"
       delegate_to: localhost
       when: ansible_facts.net_system == 'nxos'
