@@ -7,6 +7,9 @@
     - config_folder: /tmp/configs
   
   tasks:    
+    - debug: msg={{ hostvars[item].inventory_dict }}
+      with_items: groups['ALL_OS']
+      
     - name: Add configs
       shell: "git add ."
       args:
