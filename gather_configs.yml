@@ -15,8 +15,8 @@
     - name: Enforce inventory
       lineinfile:
         path: "{{ config_folder }}/ansible_managed_inventory"
-        regexp: '^[all_hosts:children]$'
-        line: '[all_hosts:children]'
+        regexp: "^[all_hosts:children]$"
+        line: "[all_hosts:children]"
         create: yes
       delegate_to: localhost
     
@@ -106,7 +106,7 @@
         backup: yes
         backup_options:
           filename: "{{ ansible_facts.net_hostname }}"
-          dir_path: "{{ config_folder }}/{{ ansible_facts.net_system }}-{{ ansible_facts.net_version }}"
+          dir_path: "{{ config_folder }}/{{ ansible_facts.net_model }}"
       when: ansible_facts.net_system == 'ios'
       
     - name: iosxr backup
@@ -114,7 +114,7 @@
         backup: yes
         backup_options:
           filename: "{{ ansible_fact.net_config | regex_search('\\nhostname (.*)\\n') }}"
-          dir_path: "{{ config_folder }}/{{ ansible_facts.net_model }}"
+          dir_path: "{{ config_folder }}/{{ ansible_facts.net_system }}-{{ ansible_facts.net_version }}"
       when: ansible_facts.net_system == 'iosxr'
       
     - name: nxos backup
