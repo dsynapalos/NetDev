@@ -8,25 +8,7 @@
   vars:
     - config_folder: /tmp/configs
   
-  tasks:
-    - debug: msg={{ ansible_facts }}
-  
-    - name: Setup default git configuration
-      git_config:
-        name: "{{ item.name }}"
-        scope: global
-        value: "{{ item.value }}"
-      with_items:
-        - {name: "user.name",  value: "{{ DOCKER_USERNAME }}" }
-        - {name: "user.email", value: "{{ DOCKER_USERNAME }}@gmail.com" }
-      delegate_to: localhost
-    
-    - name: clone GitLab Project
-      git:
-        repo: "https://oauth2:{{ GITLAB_TOKEN | urlencode }}@gitlab.com/{{ DOCKER_USERNAME }}/configs_inv.git"
-        dest: "{{ config_folder }}"
-      delegate_to: localhost
-    
+  tasks: 
     - name: Enforce inventory
       lineinfile:
         path: "{{ config_folder }}/ansible_managed_inventory"
@@ -82,39 +64,3 @@
           filename: "{{ ansible_facts.net_hostname }}"
           dir_path: "{{ config_folder }}/{{ ansible_facts.net_model }}"
       when: ansible_network_os == 'nxos'
-    
-    - name: Add configs
-      shell: "git add ."
-      args:
-        chdir: "{{ config_folder }}"
-      register: gitadd
-      delegate_to: localhost
-      
-    - name: check differences
-      shell: git diff HEAD
-      args:
-        chdir: "{{ config_folder }}"
-      register: diffs
-      delegate_to: localhost
-
-    - name: get time
-      shell: TZ=Europe/Athens date '+%Y-%m-%d %H:%M:%S'
-      register: timestamp
-      when: diffs.stdout
-      delegate_to: localhost
-
-    - name: Git commit
-      shell: git commit -m "Ansible Managed Backup - {{ timestamp.stdout }}"
-      args:
-        chdir: "{{ config_folder }}"
-      register: gitcommit
-      when: diffs.stdout
-      delegate_to: localhost
-
-    - name: Git push
-      shell: git push origin master
-      args:
-        chdir: "{{ config_folder }}"
-      when: diffs.stdout
-      register: gitpush
-      delegate_to: localhost
