@@ -2,16 +2,16 @@
 
 - name: Setup default git configuration
   git_config:
-  name: "{{ item.name }}"
-  scope: global
-  value: "{{ item.value }}"
+    name: "{{ item.name }}"
+    scope: global
+    value: "{{ item.value }}"
   with_items:
-  - {name: "user.name",  value: "{{ DOCKER_USERNAME }}" }
-  - {name: "user.email", value: "{{ DOCKER_USERNAME }}@gmail.com" }
+    - {name: "user.name",  value: "{{ DOCKER_USERNAME }}" }
+    - {name: "user.email", value: "{{ DOCKER_USERNAME }}@gmail.com" }
   delegate_to: localhost
 
 - name: clone GitLab Project
   git:
-  repo: "https://oauth2:{{ GITLAB_TOKEN | urlencode }}@gitlab.com/{{ DOCKER_USERNAME }}/configs_inv.git"
-  dest: "{{ config_folder }}"
+    repo: "https://oauth2:{{ GITLAB_TOKEN | urlencode }}@gitlab.com/{{ DOCKER_USERNAME }}/configs_inv.git"
+    dest: "{{ config_folder }}"
   delegate_to: localhost
