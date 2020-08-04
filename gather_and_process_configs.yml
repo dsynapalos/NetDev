@@ -1,0 +1,3 @@
+  - import_playbook: pre_gather.yaml
+  - import_playbook: gather_configs.yaml
+  - import_playbook: post_gather.yaml
