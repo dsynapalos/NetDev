@@ -7,6 +7,7 @@
   gather_facts: yes
   
   vars:
+    - ansible_command_timeout: 120
     - config_folder: /tmp/configs
   
   tasks: 
@@ -22,17 +23,17 @@
     - name: Conform networking type group
       lineinfile:
         path: "{{ config_folder }}/ansible_managed_inventory"
-        regexp: '^{{ ansible_facts.ansible_net_system }}$'
+        regexp: '^{{ ansible_facts.net_system }}$'
         insertafter: '[all_hosts:children]'
-        line: '{{ ansible_facts.ansible_net_system }}'
+        line: '{{ ansible_facts.net_system }}'
       delegate_to: localhost
         
     - name: Conform networking type object
       lineinfile:
         path: "{{ config_folder }}/ansible_managed_inventory"
-        regexp: '^[{{ ansible_facts.ansible_net_system }}]$'
-        insertafter: '{{ ansible_facts.ansible_net_system }}'
-        line: '[{{ ansible_facts.ansible_net_system }}]'
+        regexp: '^[{{ ansible_facts.net_system }}]$'
+        insertafter: '{{ ansible_facts.net_system }}'
+        line: '[{{ ansible_facts.net_system }}]'
       delegate_to: localhost
         
     - name: Update inventory
