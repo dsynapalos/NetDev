@@ -8,7 +8,6 @@
   vars:
   
     - ansible_become_password: "{{ IOS_PASS }}"
-    - ansible_user: "{{ IOS_USER }}"
     - ansible_password: "{{ IOS_PASS }}"
     - ansible_ssh_port: "{{ CSR1000V_SSH }}"
     - config_folder: /tmp/configs
