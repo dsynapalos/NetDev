@@ -35,9 +35,7 @@ Connect to Cisco Sandbox and backup config:
   image: registry.gitlab.com/$DOCKER_USERNAME/$DOCKER_REPOSITORY
   stage: get_config
   script:
-    - ansible-playbook pre_gather.yml -i inventory -e "DOCKER_USERNAME=${DOCKER_USERNAME} GITLAB_TOKEN=${GITLAB_TOKEN} NXOS_USER=${NXOS_USER} NXOS_PASS=${NXOS_PASS} IOS_USER=${IOS_USER} IOS_PASS=${IOS_PASS} CSR1000V_SSH=${CSR1000V_SSH}" -vvvvv
-    - ansible-playbook gather_configs.yml -i inventory -e "DOCKER_USERNAME=${DOCKER_USERNAME} GITLAB_TOKEN=${GITLAB_TOKEN} NXOS_USER=${NXOS_USER} NXOS_PASS=${NXOS_PASS} IOS_USER=${IOS_USER} IOS_PASS=${IOS_PASS} CSR1000V_SSH=${CSR1000V_SSH}" -vvvvv
-    - ansible-playbook post_gather.yml -i inventory -e "DOCKER_USERNAME=${DOCKER_USERNAME} GITLAB_TOKEN=${GITLAB_TOKEN} NXOS_USER=${NXOS_USER} NXOS_PASS=${NXOS_PASS} IOS_USER=${IOS_USER} IOS_PASS=${IOS_PASS} CSR1000V_SSH=${CSR1000V_SSH}" -vvvvv
+    - ansible-playbook gather_and_proccess_configs.yml -i inventory -e "DOCKER_USERNAME=${DOCKER_USERNAME} GITLAB_TOKEN=${GITLAB_TOKEN} NXOS_USER=${NXOS_USER} NXOS_PASS=${NXOS_PASS} IOS_USER=${IOS_USER} IOS_PASS=${IOS_PASS} CSR1000V_SSH=${CSR1000V_SSH}" -vvvvv
   artifacts:
     paths:
       - configs
