@@ -88,7 +88,7 @@
         path: "{{ config_folder }}/ansible_managed_inventory"
         regexp: "^{{ ansible_fact.net_config | regex_search('\\nhostname (.*)\\n') }}.*$"
         insertafter: "[{{ ansible_facts.net_system }}-{{ ansible_facts.net_version }}]"
-        line: "{{ ansible_fact.net_config | regex_search('\\nhostname (.*)\\n') }} ansible_host={{ ansible_host }} ansible_ssh_port={{ ansible_ssh_port }}"
+        line: "{{ ansible_facts.net_config | regex_search('\\nhostname (.*)\\n') }} ansible_host={{ ansible_host }} ansible_ssh_port={{ ansible_ssh_port }}"
       delegate_to: localhost
       when: ansible_facts.net_system == 'iosxr'
 
@@ -113,7 +113,7 @@
       iosxr_config:
         backup: yes
         backup_options:
-          filename: "{{ ansible_fact.net_config | regex_search('\nhostname (.*)\n') }}"
+          filename: "{{ ansible_facts.net_config | regex_search('\nhostname (.*)\n') }}"
           dir_path: "{{ config_folder }}/{{ ansible_facts.net_system }}-{{ ansible_facts.net_version }}"
       when: ansible_facts.net_system == 'iosxr'
       
