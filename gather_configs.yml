@@ -10,6 +10,7 @@
     - config_folder: /tmp/configs
   
   tasks: 
+    - debug: msg="{{ansible_facts}}"
     - name: Enforce inventory
       lineinfile:
         path: "{{ config_folder }}/ansible_managed_inventory"
