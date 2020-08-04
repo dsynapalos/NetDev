@@ -19,11 +19,13 @@
       with_items:
         - {name: "user.name",  value: "{{ DOCKER_USERNAME }}" }
         - {name: "user.email", value: "{{ DOCKER_USERNAME }}@gmail.com" }
+      delegate_to: localhost
     
     - name: clone GitLab Project
       git:
         repo: "https://oauth2:{{ GITLAB_TOKEN | urlencode }}@gitlab.com/{{ DOCKER_USERNAME }}/configs_inv.git"
         dest: "{{ config_folder }}"
+      delegate_to: localhost
     
     - name: Enforce inventory
       lineinfile:
@@ -31,6 +33,7 @@
         regexp: '^[all_hosts:children]$'
         line: '[all_hosts:children]'
         create: yes
+      delegate_to: localhost
     
     - name: Conform networking type group
       lineinfile:
@@ -38,6 +41,7 @@
         regexp: '^{{ ansible_facts.net_model }}$'
         insertafter: '[all_hosts:children]'
         line: '{{ ansible_facts.net_model }}'
+      delegate_to: localhost
         
     - name: Conform networking type object
       lineinfile:
@@ -45,6 +49,7 @@
         regexp: '^[{{ ansible_facts.net_model }}]$'
         insertafter: '{{ ansible_facts.net_model }}'
         line: '[{{ ansible_facts.net_model }}]'
+      delegate_to: localhost
         
     - name: Update inventory
       lineinfile:
@@ -52,6 +57,7 @@
         regexp: '^{{ ansible_facts.net_hostname }}.*$'
         insertafter: '[{{ ansible_facts.net_model }}]'
         line: '{{ ansible_facts.net_hostname }} ansible_host={{ ansible_host }} ansible_ssh_port={{ ansible_ssh_port }}'
+      delegate_to: localhost
         
     - name: configurable backup path
       ios_config:
@@ -82,17 +88,20 @@
       args:
         chdir: "{{ config_folder }}"
       register: gitadd
+      delegate_to: localhost
       
     - name: check differences
       shell: git diff HEAD
       args:
         chdir: "{{ config_folder }}"
       register: diffs
+      delegate_to: localhost
 
     - name: get time
       shell: TZ=Europe/Athens date '+%Y-%m-%d %H:%M:%S'
       register: timestamp
       when: diffs.stdout
+      delegate_to: localhost
 
     - name: Git commit
       shell: git commit -m "Ansible Managed Backup - {{ timestamp.stdout }}"
@@ -100,6 +109,7 @@
         chdir: "{{ config_folder }}"
       register: gitcommit
       when: diffs.stdout
+      delegate_to: localhost
 
     - name: Git push
       shell: git push origin master
@@ -107,3 +117,4 @@
         chdir: "{{ config_folder }}"
       when: diffs.stdout
       register: gitpush
+      delegate_to: localhost
