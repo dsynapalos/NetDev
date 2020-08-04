@@ -1,3 +1,6 @@
+[ansible_server]
+localhost ansible_connection=docker
+
 [ALL_OS:children]
 IOS
 IOSXR
