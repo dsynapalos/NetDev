@@ -1,5 +1,5 @@
 [ansible_server]
-localhost ansible_connection=docker
+localhost ansible_connection=local
 
 [ALL_OS:children]
 IOS
