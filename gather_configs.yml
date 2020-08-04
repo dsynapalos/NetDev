@@ -27,7 +27,7 @@
         insertafter: '[all_hosts:children]'
         line: '{{ ansible_facts.net_model }}'
       delegate_to: localhost
-      when: "{{ ansible_facts.net_system }}" == 'ios'
+      when: {{ ansible_facts.net_system }} == 'ios'
 
     - name: Conform iosxr networking type group
       lineinfile:
@@ -36,7 +36,7 @@
         insertafter: '[all_hosts:children]'
         line: '{{ ansible_facts.net_system }}-{{ ansible_facts.net_version }}'
       delegate_to: localhost
-      when: "{{ ansible_facts.net_system }}" == 'iosxr'
+      when: {{ ansible_facts.net_system }} == 'iosxr'
 
     - name: Conform nxos networking type group
       lineinfile:
@@ -45,7 +45,7 @@
         insertafter: '[all_hosts:children]'
         line: '{{ ansible_facts.net_platform }}'
       delegate_to: localhost
-      when: "{{ ansible_facts.net_system }}" == 'nxos'
+      when: {{ ansible_facts.net_system }} == 'nxos'
         
     - name: Conform ios networking type object
       lineinfile:
@@ -54,7 +54,7 @@
         insertafter: '{{ ansible_facts.net_model }}'
         line: '[{{ ansible_facts.net_model }}]'
       delegate_to: localhost
-      when: "{{ ansible_facts.net_system }}" == 'ios'
+      when: {{ ansible_facts.net_system }} == 'ios'
 
     - name: Conform iosxr networking type object
       lineinfile:
@@ -63,7 +63,7 @@
         insertafter: '{{ ansible_facts.net_system }}-{{ ansible_facts.net_version }}'
         line: '[{{ ansible_facts.net_system }}-{{ ansible_facts.net_version }}]'
       delegate_to: localhost
-      when: "{{ ansible_facts.net_system }}" == 'iosxr'
+      when: {{ ansible_facts.net_system }} == 'iosxr'
 
     - name: Conform nxos networking type object
       lineinfile:
@@ -72,7 +72,7 @@
         insertafter: '{{ ansible_facts.net_platform }}'
         line: '[{{ ansible_facts.net_platform }}]'
       delegate_to: localhost
-      when: "{{ ansible_facts.net_system }}" == 'nxos'
+      when: {{ ansible_facts.net_system }} == 'nxos'
 
     - name: Update ios inventory
       lineinfile:
@@ -81,7 +81,7 @@
         insertafter: '[{{ ansible_facts.net_model }}]'
         line: '{{ ansible_facts.net_hostname }} ansible_host={{ ansible_host }} ansible_ssh_port={{ ansible_ssh_port }}'
       delegate_to: localhost
-      when: "{{ ansible_facts.net_system }}" == 'ios'
+      when: {{ ansible_facts.net_system }} == 'ios'
 
     - name: Update iosxr inventory
       lineinfile:
@@ -90,7 +90,7 @@
         insertafter: '[{{ ansible_facts.net_system }}-{{ ansible_facts.net_version }}]'
         line: '{{ ansible_fact.net_config | regex_search('\\nhostname (.*)\\n') }} ansible_host={{ ansible_host }} ansible_ssh_port={{ ansible_ssh_port }}'
       delegate_to: localhost
-      when: "{{ ansible_facts.net_system }}" == 'iosxr'
+      when: {{ ansible_facts.net_system }} == 'iosxr'
 
     - name: Update nxos inventory
       lineinfile:
@@ -99,7 +99,7 @@
         insertafter: '[{{ ansible_facts.net_platform }}]'
         line: '{{ ansible_facts.net_hostname }} ansible_host={{ ansible_host }} ansible_ssh_port={{ ansible_ssh_port }}'
       delegate_to: localhost
-      when: "{{ ansible_facts.net_system }}" == 'nxos'
+      when: {{ ansible_facts.net_system }} == 'nxos'
         
     - name: ios backup
       ios_config:
@@ -107,7 +107,7 @@
         backup_options:
           filename: "{{ ansible_facts.net_hostname }}"
           dir_path: "{{ config_folder }}/{{ ansible_facts.net_system }}-{{ ansible_facts.net_version }}"
-      when: "{{ ansible_facts.net_system }}" == 'ios'
+      when: {{ ansible_facts.net_system }} == 'ios'
       
     - name: iosxr backup
       iosxr_config:
@@ -115,7 +115,7 @@
         backup_options:
           filename: "{{ ansible_fact.net_config | regex_search('\\nhostname (.*)\\n') }}"
           dir_path: "{{ config_folder }}/{{ ansible_facts.net_model }}"
-      when: "{{ ansible_facts.net_system }}" == 'iosxr'
+      when: {{ ansible_facts.net_system }} == 'iosxr'
       
     - name: nxos backup
       nxos_config:
@@ -123,4 +123,4 @@
         backup_options:
           filename: "{{ ansible_facts.net_hostname }}"
           dir_path: "{{ config_folder }}/{{ ansible_facts.net_platform }}"
-      when: "{{ ansible_facts.net_system }}" == 'nxos'
+      when: {{ ansible_facts.net_system }} == 'nxos'
