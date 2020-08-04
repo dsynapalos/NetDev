@@ -3,6 +3,7 @@
   become: yes
   become_method: enable
   connection: network_cli
+  ignore_errors: yes
   gather_facts: yes
   
   vars:
