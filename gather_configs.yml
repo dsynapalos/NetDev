@@ -12,115 +12,45 @@
   
   tasks: 
     - debug: msg="{{ansible_facts}}"
-    - name: Enforce inventory
-      lineinfile:
-        path: "{{ config_folder }}/ansible_managed_inventory"
-        regexp: "^[all_hosts:children]$"
-        line: "[all_hosts:children]"
-        create: yes
-      delegate_to: localhost
+
+    - name: assign ios vars
+      set_fact:
+        platform: "{{ ansible_facts.net_model }}"
+        hostname: "{{ ansible_facts.net_hostname }}"
+      when: ansible_facts.net_system == 'ios'
+
+    - name: assign iosxr vars
+      set_fact:
+        platform: "{{ ansible_facts.net_system }}-{{ ansible_facts.net_version }}"
+        hostname: "{{ ansible_facts.net_config | regex_search('hostname (.*)\\n') | regex_replace('hostname ') }}"
+      when: ansible_facts.net_system == 'iosxr'
+
+    - name: assign nxos vars
+      set_fact:
+        platform: "{{ ansible_facts.net_platform }}"
+        hostname: "{{ ansible_facts.net_hostname }}"
+      when: ansible_facts.net_system == 'nxos'
+
+    - name: create empty dict
+      set_fact:
+        inventory_dict: "{{ [] | list | items2dict }}"
     
-    - name: Conform ios networking type group
-      lineinfile:
-        path: "{{ config_folder }}/ansible_managed_inventory"
-        regexp: "^{{ ansible_facts.net_model }}$"
-        insertafter: "[all_hosts:children]"
-        line: "{{ ansible_facts.net_model }}"
-      delegate_to: localhost
-      when: ansible_facts.net_system == 'ios'
+    - name: add platform to dicts keys
+      set_fact:
+        inventory_dict: "{{ inventory_dict | combine( { platform: '{{ [] | list }} '} )}}"
+      when: "platform not in inventory_dict.keys() | list"
 
-    - name: Conform iosxr networking type group
-      lineinfile:
-        path: "{{ config_folder }}/ansible_managed_inventory"
-        regexp: "^{{ ansible_facts.net_system }}-{{ ansible_facts.net_version }}$"
-        insertafter: "[all_hosts:children]"
-        line: "{{ ansible_facts.net_system }}-{{ ansible_facts.net_version }}"
-      delegate_to: localhost
-      when: ansible_facts.net_system == 'iosxr'
+    - name: append hostname to list
+      set_fact:
+        list_with_item: "{{ inventory_dict[platform] + [ hostname ] }}"
 
-    - name: Conform nxos networking type group
-      lineinfile:
-        path: "{{ config_folder }}/ansible_managed_inventory"
-        regexp: "^{{ ansible_facts.net_platform }}$"
-        insertafter: "[all_hosts:children]"
-        line: "{{ ansible_facts.net_platform }}"
-      delegate_to: localhost
-      when: ansible_facts.net_system == 'nxos'
-        
-    - name: Conform ios networking type object
-      lineinfile:
-        path: "{{ config_folder }}/ansible_managed_inventory"
-        regexp: "^[{{ ansible_facts.net_model }}]$"
-        insertafter: "{{ ansible_facts.net_model }}"
-        line: "[{{ ansible_facts.net_model }}]"
-      delegate_to: localhost
-      when: ansible_facts.net_system == 'ios'
-
-    - name: Conform iosxr networking type object
-      lineinfile:
-        path: "{{ config_folder }}/ansible_managed_inventory"
-        regexp: "^[{{ ansible_facts.net_system }}-{{ ansible_facts.net_version }}]$"
-        insertafter: "{{ ansible_facts.net_system }}-{{ ansible_facts.net_version }}"
-        line: "[{{ ansible_facts.net_system }}-{{ ansible_facts.net_version }}]"
-      delegate_to: localhost
-      when: ansible_facts.net_system == 'iosxr'
-
-    - name: Conform nxos networking type object
-      lineinfile:
-        path: "{{ config_folder }}/ansible_managed_inventory"
-        regexp: "^[{{ ansible_facts.net_platform }}]$"
-        insertafter: "{{ ansible_facts.net_platform }}"
-        line: "[{{ ansible_facts.net_platform }}]"
-      delegate_to: localhost
-      when: ansible_facts.net_system == 'nxos'
-
-    - name: Update ios inventory
-      lineinfile:
-        path: "{{ config_folder }}/ansible_managed_inventory"
-        regexp: "^{{ ansible_facts.net_hostname }}.*$"
-        insertafter: "[{{ ansible_facts.net_model }}]"
-        line: "{{ ansible_facts.net_hostname }} ansible_host={{ ansible_host }} ansible_ssh_port={{ ansible_ssh_port }}"
-      delegate_to: localhost
-      when: ansible_facts.net_system == 'ios'
-
-    - name: Update iosxr inventory
-      lineinfile:
-        path: "{{ config_folder }}/ansible_managed_inventory"
-        regexp: "^{{ ansible_facts.net_config | regex_search('hostname (.*)\\n') | regex_replace('hostname ') }}.*$"
-        insertafter: "[{{ ansible_facts.net_system }}-{{ ansible_facts.net_version }}]"
-        line: "{{ ansible_facts.net_config | regex_search('hostname (.*)\\n') | regex_replace('hostname ') }} ansible_host={{ ansible_host }} ansible_ssh_port={{ ansible_ssh_port }}"
-      delegate_to: localhost
-      when: ansible_facts.net_system == 'iosxr'
-
-    - name: Update nxos inventory
-      lineinfile:
-        path: "{{ config_folder }}/ansible_managed_inventory"
-        regexp: "^{{ ansible_facts.net_hostname }}.*$"
-        insertafter: "[{{ ansible_facts.net_platform }}]"
-        line: "{{ ansible_facts.net_hostname }} ansible_host={{ ansible_host }} ansible_ssh_port={{ ansible_ssh_port }}"
-      delegate_to: localhost
-      when: ansible_facts.net_system == 'nxos'
+    - name: replace dicts platform with list
+      set_fact:
+        inventory_dict: "{{ inventory_dict | combine( { platform: list_with_item } ) }}"    
         
     - name: ios backup
-      ios_config:
+      cli_config:
         backup: yes
         backup_options:
-          filename: "{{ ansible_facts.net_hostname }}"
-          dir_path: "{{ config_folder }}/{{ ansible_facts.net_model }}"
-      when: ansible_facts.net_system == 'ios'
-      
-    - name: iosxr backup
-      iosxr_config:
-        backup: yes
-        backup_options:
-          filename: "{{ ansible_facts.net_config | regex_search('hostname (.*)\\n') | regex_replace('hostname ') }}"
-          dir_path: "{{ config_folder }}/{{ ansible_facts.net_system }}-{{ ansible_facts.net_version }}"
-      when: ansible_facts.net_system == 'iosxr'
-      
-    - name: nxos backup
-      nxos_config:
-        backup: yes
-        backup_options:
-          filename: "{{ ansible_facts.net_hostname }}"
-          dir_path: "{{ config_folder }}/{{ ansible_facts.net_platform }}"
-      when: ansible_facts.net_system == 'nxos'
+          filename: "{{ hostname }}"
+          dir_path: "{{ config_folder }}/{{ platform }}"
