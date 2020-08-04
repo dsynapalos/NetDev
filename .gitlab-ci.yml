@@ -36,7 +36,7 @@ Connect to Cisco Sandbox and backup config:
   stage: get_config
   script:
     - ansible all -i 'iosxr-mgmt-latest.cisco.com,' -m setup -e 'ansible_become_password=C1sco12345 ansible_user=developer  ansible_password=C1sco12345 ansible_ssh_port=8181 ansible_connection=network_cli ansible_become_method=enable ansible_network_os=iosxr'
-    - ansible-playbook gather_configs.yml -i inventory -e "DOCKER_USERNAME=${DOCKER_USERNAME} GITLAB_TOKEN=${GITLAB_TOKEN} NXOS_USER=${NXS_USER} NXS_PASS=${NXS_PASS} IOS_USER=${IOS_USER} IOS_PASS=${IOS_PASS} CSR1000V_SSH=${CSR1000V_SSH}" -vvvvv
+    - ansible-playbook gather_configs.yml -i inventory -e "DOCKER_USERNAME=${DOCKER_USERNAME} GITLAB_TOKEN=${GITLAB_TOKEN} NXOS_USER=${NXS_USER} NXOS_PASS=${NXOS_PASS} IOS_USER=${IOS_USER} IOS_PASS=${IOS_PASS} CSR1000V_SSH=${CSR1000V_SSH}" -vvvvv
   artifacts:
     paths:
       - configs
