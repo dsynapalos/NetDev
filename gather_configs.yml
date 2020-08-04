@@ -23,7 +23,7 @@
     - name: assign iosxr vars
       set_fact:
         platform: "{{ ansible_facts.net_system }}-{{ ansible_facts.net_version }}"
-        hostname: "{{ ansible_facts.net_config | regex_search('hostname (.*)\\n') | regex_replace('hostname ') }}"
+        hostname: "{{ ansible_facts.net_config | regex_search('hostname (.*)\ndomain') | regex_replace('hostname ') | regex_replace('\ndomain') }}"
       when: ansible_facts.net_system == 'iosxr'
 
     - name: assign nxos vars
