@@ -34,16 +34,7 @@
     
     - name: add platform to dicts keys
       set_fact:
-        inventory_dict: "{{ inventory_dict | combine({ platform: []}) }}"
-      when: "platform not in inventory_dict.keys() | list"
-
-    - name: append hostname to list
-      set_fact:
-        list_with_item: "{{ inventory_dict[platform] + [ hostname ] }}"
-
-    - name: replace dicts platform with list
-      set_fact:
-        inventory_dict: "{{ inventory_dict | combine( { platform: list_with_item } ) }}"    
+        inventory_dict: "{{ { platform: hostname } | items2dict  }}"
         
     - name: ios backup
       cli_config:
@@ -51,4 +42,5 @@
         backup_options:
           filename: "{{ hostname }}"
           dir_path: "{{ config_folder }}/{{ platform }}"
+          
     - debug: msg="{{inventory_dict}}"
