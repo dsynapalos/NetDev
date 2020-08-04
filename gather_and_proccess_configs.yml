@@ -1,3 +1,29 @@
-  - import_playbook: "{{playbook_dir}}/pre_gather.yaml"
-  - import_playbook: "{{playbook_dir}}/gather_configs.yaml"
-  - import_playbook: "{{playbook_dir}}/post_gather.yaml"
+---
+- hosts: localhost
+  become: yes
+  gather_facts: no
+  vars:
+    - config_folder: /tmp/configs
+  roles:
+    - pre_gather
+
+- hosts: ALL_OS
+  become: yes
+  become_method: enable
+  connection: network_cli
+  ignore_errors: yes
+  gather_facts: yes
+  vars:
+    - ansible_command_timeout: 120
+    - config_folder: /tmp/configs
+    - inventory_dict: {}
+  roles:
+    - gather_configs
+
+- hosts: localhost
+  become: yes
+  gather_facts: no
+  vars:
+    - config_folder: /tmp/configs
+  roles:
+    - post_gather
