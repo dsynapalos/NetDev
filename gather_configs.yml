@@ -9,6 +9,7 @@
   vars:
     - ansible_command_timeout: 120
     - config_folder: /tmp/configs
+    - inventory_dict: {}
   
   tasks: 
     - debug: msg="{{ansible_facts}}"
@@ -30,14 +31,10 @@
         platform: "{{ ansible_facts.net_platform }}"
         hostname: "{{ ansible_facts.net_hostname }}"
       when: ansible_facts.net_system == 'nxos'
-
-    - name: create empty dict
-      set_fact:
-        inventory_dict: "{{ [] | list | items2dict }}"
     
     - name: add platform to dicts keys
       set_fact:
-        inventory_dict: "{{ inventory_dict | combine( { platform: '{{ [] | list }} '} )}}"
+        inventory_dict: "{{ inventory_dict | combine({ platform: []}) }}"
       when: "platform not in inventory_dict.keys() | list"
 
     - name: append hostname to list
