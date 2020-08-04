@@ -22,17 +22,17 @@
     - name: Conform networking type group
       lineinfile:
         path: "{{ config_folder }}/ansible_managed_inventory"
-        regexp: '^{{ ansible_facts.net_model }}$'
+        regexp: '^{{ ansible_facts.ansible_net_system }}$'
         insertafter: '[all_hosts:children]'
-        line: '{{ ansible_facts.net_model }}'
+        line: '{{ ansible_facts.ansible_net_system }}'
       delegate_to: localhost
         
     - name: Conform networking type object
       lineinfile:
         path: "{{ config_folder }}/ansible_managed_inventory"
-        regexp: '^[{{ ansible_facts.net_model }}]$'
-        insertafter: '{{ ansible_facts.net_model }}'
-        line: '[{{ ansible_facts.net_model }}]'
+        regexp: '^[{{ ansible_facts.ansible_net_system }}]$'
+        insertafter: '{{ ansible_facts.ansible_net_system }}'
+        line: '[{{ ansible_facts.ansible_net_system }}]'
       delegate_to: localhost
         
     - name: Update inventory
