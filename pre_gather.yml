@@ -1,0 +1,28 @@
+---
+- hosts: ALL_OS
+  become: yes
+  become_method: enable
+  connection: network_cli
+  gather_facts: yes
+  
+  vars:
+    - config_folder: /tmp/configs
+  
+  tasks:
+    - debug: msg={{ ansible_facts }}
+  
+    - name: Setup default git configuration
+      git_config:
+        name: "{{ item.name }}"
+        scope: global
+        value: "{{ item.value }}"
+      with_items:
+        - {name: "user.name",  value: "{{ DOCKER_USERNAME }}" }
+        - {name: "user.email", value: "{{ DOCKER_USERNAME }}@gmail.com" }
+      delegate_to: localhost
+    
+    - name: clone GitLab Project
+      git:
+        repo: "https://oauth2:{{ GITLAB_TOKEN | urlencode }}@gitlab.com/{{ DOCKER_USERNAME }}/configs_inv.git"
+        dest: "{{ config_folder }}"
+      delegate_to: localhost
