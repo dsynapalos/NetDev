@@ -31,7 +31,7 @@
 
 - name: Recursively find /tmp files older than 2 days
   find:
-    paths: "{{ config_folder }}/{{ platform }}"
+    paths: "{{ config_folder }}"
     recurse: yes
 
 - debug: msg="{{inventory_dict}}"
