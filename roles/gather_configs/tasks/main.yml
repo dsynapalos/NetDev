@@ -20,11 +20,7 @@
 
 - name: add platform to dicts keys
   set_fact:
-    dict_str: "{ {{platform}}: {{hostname}} }"
-
-- name: add platform to dicts keys
-  set_fact:
-    inventory_dict: "{{ dict_str | list | items2dict }}"
+    inventory_dict: "{{ dict([platform,] | zip([hostname,])) }}"
 
 - name: ios backup
   cli_config:
