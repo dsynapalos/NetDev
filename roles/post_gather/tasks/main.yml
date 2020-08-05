@@ -32,7 +32,7 @@
 - name: Populate values
   lineinfile:
     path: "{{config_folder}}/ansible_managed_inventory"
-    line: "[{{ item.key }}]\n{{item.value | join(', ') | regex_replace(' ','') | regex_replace(',','\n')}}"
+    line: "[{{ item.key }}]\n{{item.value | join(',') | regex_replace(',','\n')}}"
   with_dict: "{{item_dir}}"
 
 - name: Add configs
