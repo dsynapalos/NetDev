@@ -1,4 +1,3 @@
-
 - debug: msg="{{ansible_facts}}"
 
 - name: assign ios vars
@@ -21,7 +20,11 @@
 
 - name: add platform to dicts keys
   set_fact:
-    inventory_dict: "{{ { platform: hostname } | list | items2dict }}"
+    dict_str: "{ {{platform}}: {{hostname}} }"
+
+- name: add platform to dicts keys
+  set_fact:
+    inventory_dict: "{{ dict_str | list | items2dict }}"
 
 - name: ios backup
   cli_config:
