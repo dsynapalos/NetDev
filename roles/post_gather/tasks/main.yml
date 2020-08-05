@@ -10,8 +10,25 @@
     item_dir: "{{ item_dir | combine( { (hostvars[item].inventory_dict.keys() | list | first): ( (item_dir[hostvars[item].inventory_dict.keys() | list | first] | default([])) +[hostvars[item].inventory_dict.values() | list | first]) }  ) }}"
   with_items: "{{groups['ALL_OS']}}"
 
-
 - debug: msg="{{ item_dir }}"
+
+- name: Create inventory w/ supergroup
+  lineinfile:
+    path: "{{config_folder}}/ansible_managed_inventory"
+    line: "[ALL:children]"
+    create: yes
+
+- name: Add subgroups
+  lineinfile:
+    path: "{{config_folder}}/ansible_managed_inventory"
+    line: "{{ item.key }}"
+  with_dict: "{{test_dict}}"
+
+- name: Populate values
+  lineinfile:
+    path: "{{config_folder}}/ansible_managed_inventory"
+    line: "[{{ item.key }}]\n{{item.value | join(', ') | regex_replace(' ','') | regex_replace(',','\n')}}"
+  with_dict: "{{item_dir}}"
 
 - name: Add configs
   shell: "git add ."
