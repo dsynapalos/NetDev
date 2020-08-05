@@ -7,7 +7,7 @@
     - config_folder: /tmp/configs
   
   tasks:    
-    - debug: msg={{ hostvars[item].inventory_dict }}
+    - debug: msg={{ hostvars[item] }}
       with_items: "{{groups['ALL_OS']}}"
       
     - name: Add configs
