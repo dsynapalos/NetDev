@@ -22,7 +22,7 @@
   lineinfile:
     path: "{{config_folder}}/ansible_managed_inventory"
     line: "{{ item.key }}"
-  with_dict: "{{test_dict}}"
+  with_dict: "{{item_dir}}"
 
 - name: Populate values
   lineinfile:
