@@ -60,7 +60,7 @@
   when: diffs.stdout
 
 - name: Git push
-  shell: git push origin master
+  shell: git push --force origin master
   args:
     chdir: "{{ config_folder }}"
   when: diffs.stdout
