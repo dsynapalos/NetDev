@@ -3,24 +3,24 @@
 - name: assign ios vars
   set_fact:
     platform: "{{ ansible_facts.net_model }}"
-    hostname: "{{ ansible_facts.net_hostname }}"
+    values: "{{ ansible_facts.net_hostname }}"
   when: ansible_facts.net_system == 'ios'
 
 - name: assign iosxr vars
   set_fact:
     platform: "{{ ansible_facts.net_system }}-{{ ansible_facts.net_version }}"
-    hostname: "{{ ansible_facts.net_config | regex_search('hostname (.*)\ndomain') | regex_replace('hostname ') | regex_replace('\ndomain') }}"
+    values: "{{ ansible_facts.net_config | regex_search('hostname (.*)\ndomain') | regex_replace('hostname ') | regex_replace('\ndomain') }}"
   when: ansible_facts.net_system == 'iosxr'
 
 - name: assign nxos vars
   set_fact:
     platform: "{{ ansible_facts.net_platform }}"
-    hostname: "{{ ansible_facts.net_hostname }}"
+    values: "{{ ansible_facts.net_hostname }} ansible_host={{hostvars[inventory_hostname].ansible_host}}"
   when: ansible_facts.net_system == 'nxos'
 
 - name: add platform to dicts keys
   set_fact:
-    inventory_dict: "{{ dict([platform,] | zip([hostname,])) }}"
+    inventory_dict: "{{ dict([platform,] | zip([values,])) }}"
 
 - name: ios backup
   cli_config:
