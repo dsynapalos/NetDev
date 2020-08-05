@@ -7,7 +7,7 @@
 
 - name: add platform to dicts keys
   set_fact:
-    item_dir: "{{ item_dir | combine( { (hostvars[item].inventory_dict.keys() | list | first): [hostvars[item].inventory_dict.values() | list | first] }  ) }}"
+    item_dir: "{% (hostvars[item].inventory_dict.keys() | list | first) not in (item_dir.keys() | list) %} {{ item_dir | combine( { (hostvars[item].inventory_dict.keys() | list | first): [hostvars[item].inventory_dict.values() | list | first] }  ) }} {% else %} {{ item_dir | combine( { (hostvars[item].inventory_dict.keys() | list | first): item_dir[hostvars[item].inventory_dict.values() | list | first] + [hostvars[item].inventory_dict.values() | list | first] }  ) }} {% endif %}"
   with_items: "{{groups['ALL_OS']}}"
 
 
