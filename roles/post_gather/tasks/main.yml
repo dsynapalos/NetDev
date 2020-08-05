@@ -12,6 +12,11 @@
 
 - debug: msg="{{ item_dir }}"
 
+- name: Delete old inventory
+  file:
+    path: "{{config_folder}}/ansible_managed_inventory"
+    state: absent
+
 - name: Create inventory w/ supergroup
   lineinfile:
     path: "{{config_folder}}/ansible_managed_inventory"
