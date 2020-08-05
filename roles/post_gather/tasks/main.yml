@@ -35,6 +35,11 @@
     line: "[{{ item.key }}]\n{{item.value | join(',') | regex_replace(',','\n')}}"
   with_dict: "{{item_dir}}"
 
+- name: Recursively find /tmp files older than 2 days
+  find:
+    paths: "{{ config_folder }}"
+    recurse: yes
+    
 - name: Add configs
   shell: "git add ."
   args:
