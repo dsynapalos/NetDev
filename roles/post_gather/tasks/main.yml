@@ -1,8 +1,9 @@
 - debug: msg="{{ hostvars[item] }}"
   with_items: "{{groups['ALL_OS']}}"
 
-- set_fact:
-  item_dir: {}
+- name: initialize dir
+  set_fact:
+    item_dir: {}
 
 - name: add platform to dicts keys
   set_fact:
